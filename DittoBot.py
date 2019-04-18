@@ -1,5 +1,6 @@
 # Work with Python 3.6
 import discord
+import json
 import Game
 import random
 import time
@@ -33,6 +34,13 @@ async def on_message(message, self=None):
             battleclass = msg.content
 
         character = Game.character(name, 1, battleclass)
+
+        characterdict = character.__dict__
+        with open(name, 'w') as write_file:
+            json.dump(characterdict, write_file, indent=4)
+
+
+
         embed = character.printDetails()
         await client.send_message(message.channel, embed=embed)
 
@@ -48,7 +56,7 @@ async def on_message(message, self=None):
             if character.health > 100 :
                 character.health = 100
 
-            if enemy.health > 100 :
+            if enemy.health > 100:
                 enemy.health = 100
 
             msg = ("\n" + character.name + "'s Health: " + str(character.health))
@@ -63,7 +71,7 @@ async def on_message(message, self=None):
 
             # Validate user choice
             while choice not in ["1", "2", "3"]:
-                await client.send_message(message.channel, 'Emter the number of your choice')
+                await client.send_message(message.channel, 'Enter the number of your choice')
                 msg = await client.wait_for_message(author=message.author)
                 choice = msg.content
 
